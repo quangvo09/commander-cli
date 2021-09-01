@@ -1,4 +1,4 @@
-#!/Users/onpoint/bin/node
+#!/usr/bin/env node
 
 const commander = require("commander");
 const githubCommand = require("./commands/github");

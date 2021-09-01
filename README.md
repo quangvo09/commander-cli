@@ -25,5 +25,3 @@ cmd branch:create
 3. Example:
 
 ![commander-cli-new-branch](https://user-images.githubusercontent.com/6206464/131709697-a58d17fa-3bdd-42e1-b7db-a8d3b6cc9b95.gif)
-
-
