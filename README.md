@@ -2,6 +2,14 @@
 
 To help execute a sequence commands, which you need to do multiple times. It's boring right?
 
+### Install
+
+```
+  npm install -g @smartapp-org/commander-cli
+```
+
+### How to use
+
 ```
 ➜  ~ cmd -h
 Usage: cmd [options] [command]

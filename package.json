@@ -1,7 +1,28 @@
 {
-  "bin": {
-    "cmd": "./index.js"
+  "name": "@smartapp-org/commander-cli",
+  "description": "To help execute a sequence commands, which you need to do multiple times. It's boring right?",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "cmd": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quangvo09/commander-cli.git"
+  },
+  "keywords": [
+    "commander"
+  ],
+  "author": "Quang Vo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quangvo09/commander-cli/issues"
+  },
+  "homepage": "https://github.com/quangvo09/commander-cli#readme",
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^8.1.0",
