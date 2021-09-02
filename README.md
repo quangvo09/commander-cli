@@ -70,5 +70,6 @@ cmd prc
 
 #### Example:
 
-![commander-cli-new-pr](https://user-images.githubusercontent.com/6206464/131868545-07852f44-5bc6-4366-a456-271ac207eea3.gif)
+![commander-cli-new-pr](https://user-images.githubusercontent.com/6206464/131869051-40598ac4-2e1b-40f4-96a7-d03298fefe1d.gif)
+
 
