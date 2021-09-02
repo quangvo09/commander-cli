@@ -12,12 +12,14 @@ const pkg = require("./package.json");
 console.log(
   chalk.yellow(
     figlet.textSync("CMD CLI", {
+      font: "Graffiti",
       horizontalLayout: "default",
       verticalLayout: "default",
       whitespaceBreak: true,
     })
   )
 );
+console.log("");
 
 const program = new commander.Command();
 program.version(pkg.version);
