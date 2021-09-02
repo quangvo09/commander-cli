@@ -179,7 +179,7 @@ const receiver = (_options) => {
 
 export const register = (program) => {
   program
-    .command("pull-request:create")
+    .command("pr:create")
     .alias("prc")
     .alias("pr:c")
     .description("Create a new pull-request")

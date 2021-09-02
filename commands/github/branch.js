@@ -65,7 +65,7 @@ const receiver = (_options) => {
 
 export const register = (program) => {
   program
-    .command("branch:create")
+    .command("br:create")
     .alias("brc")
     .alias("br:c")
     .description("Create a new branch")
