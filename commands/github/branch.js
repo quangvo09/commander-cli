@@ -3,14 +3,14 @@ const shell = require("shelljs");
 
 const logger = require("../../utils/logger");
 
-const switchNewBranch = (origin, newBranch) => {
+const gotoNewBranch = (origin, newBranch) => {
   const command = [
-    `git fetch --all >/dev/null 2>&1`,
-    `git checkout ${origin} >/dev/null 2>&1`,
-    `git reset origin/${origin} --hard >/dev/null 2>&1`,
-    `git checkout -b "${newBranch}" >/dev/null 2>&1`,
+    `git fetch --all`,
+    `git checkout ${origin}`,
+    `git reset origin/${origin} --hard`,
+    `git checkout -b "${newBranch}"`,
   ].join(" && ");
-  if (shell.exec(command).code !== 0) {
+  if (shell.exec(command, { silent: true }).code !== 0) {
     logger.error("Git commit failed");
     return shell.exit(1);
   }
@@ -54,7 +54,7 @@ const receiver = (_options) => {
       const branch = answers.branch.toLocaleLowerCase().replace(/\s+/g, "-");
       const newBranch = `${prefix}/${branch}`;
       logger.notice("Switch to new branch", newBranch);
-      switchNewBranch(origin, newBranch);
+      gotoNewBranch(origin, newBranch);
     });
 };
 
