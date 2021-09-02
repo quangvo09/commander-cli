@@ -1,9 +1,11 @@
 import shell from "shelljs";
+import chalk from "chalk";
 
 import * as constants from "../../constants/index.js";
 import * as logger from "../../utils/logger.js";
 import * as question from "../../utils/question.js";
 import * as config from "../../utils/config.js";
+import * as progress from "../../utils/progress.js";
 
 const createPR = (baseBranch, title, options) => {
   const command = `gh pr create`;
@@ -25,13 +27,13 @@ const createPR = (baseBranch, title, options) => {
 
   // console.debug(`${command} ${opts.join(" ")}`);
 
-  const result = shell.exec(`${command} ${opts.join(" ")}`);
+  const result = shell.exec(`${command} ${opts.join(" ")}`, { silent: true });
   if (result.code !== 0) {
-    logger.error(`Create PR to \`${baseBranch}\` failed`, result.stderr);
+    logger.error(`\nCreate PR to \`${baseBranch}\` failed`, result.stderr);
     return shell.exit(1);
   }
 
-  return result.stdout;
+  return result.stdout.replace(/\n/g, "");
 };
 
 const getAllBranches = () => {
@@ -124,11 +126,11 @@ const createFeatureFlow = async (branch) => {
   logger.notice("We will create PR name", title);
 
   const branches = getAllBranches();
-  const defaultBaseBranches = config.get("PR_FEATURE_BASES") || [
-    "develop",
-    "integration",
-  ];
-  const baseBranches = branches.filter((b) => defaultBaseBranches.includes(b));
+  const defaultBaseBranches =
+    config.get("pull_request.feature.base_branches") || [];
+  const baseBranches = branches.filter(
+    (b) => defaultBaseBranches.includes(b) && b !== branch.name
+  );
   const selected = await question.checkbox(
     "Select branch you want to create PR to",
     baseBranches.map((b) => ({
@@ -137,25 +139,32 @@ const createFeatureFlow = async (branch) => {
     }))
   );
 
-  const prs = selected.map((branch) => {
+  const assignees = config.get("pull_request.feature.assignees") || [];
+  const reviewers = config.get("pull_request.feature.reviewers") || [];
+
+  const bar = progress.bar(chalk.cyan("❯ Create PR: "), 0.2, 2);
+  const prs = selected.map((branch, index) => {
+    const labels = config.get("pull_request.feature.labels") || [branch];
     const pr = createPR(branch, title, {
       body: "",
-      assignee: "me",
-      reviewer: "",
-      label: branch,
+      assignee: assignees.join(","),
+      reviewer: reviewers.join(","),
+      label: labels.join(","),
     });
+
+    bar.update(index + 1);
 
     return {
       branch,
       pr,
     };
   });
+  bar.stop();
 
-  logger.success("PR:", title);
+  logger.success("Success:", title);
   prs.map(({ branch, pr }) => {
     logger.success(`[${branch}]:`, pr);
   });
-  logger.success("Done!");
 };
 
 const createReleaseFlow = (branch) => {};

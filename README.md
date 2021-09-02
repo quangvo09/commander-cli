@@ -8,24 +8,45 @@ To help execute a sequence commands, which you need to do multiple times. It's b
   npm install -g @smartapp-org/commander-cli
 ```
 
+### Configuration
+
+- This tool will create the configuration file `.cmdrc`, you have to update `.gitignore` if do not push it to github.
+
+- You can customize default `base branch`, `assignee`, `reviewer`, `label` in the `.cmdrc` file. This configurations will be use when creating new PR.
+
 ### How to use
 
 ```
-➜  ~ cmd -h
+➜  ~ cmd
+_________     _____  ________    _________ .____    .___
+\_   ___ \   /     \ \______ \   \_   ___ \|    |   |   |
+/    \  \/  /  \ /  \ |    |  \  /    \  \/|    |   |   |
+\     \____/    Y    \|    `   \ \     \___|    |___|   |
+ \______  /\____|__  /_______  /  \______  /_______ \___|
+        \/         \/        \/          \/        \/
+
 Usage: cmd [options] [command]
 
 Options:
+  -V, --version   output the version number
   -h, --help      display help for command
 
 Commands:
-  branch:create   Create a new branch
+  br:create|brc   Create a new branch
+  pr:create|prc   Create a new pull-request
   help [command]  display help for command
 ```
 
-### Create new branch
+### 1. Create new branch
 
 ```
-cmd branch:create
+cmd br:create
+```
+
+Or
+
+```
+cmd brc
 ```
 
 1. Choose the purpose of new branch: `Feature`, `Hotfix` or `Release`
@@ -33,3 +54,15 @@ cmd branch:create
 3. Example:
 
 ![commander-cli-new-branch](https://user-images.githubusercontent.com/6206464/131709697-a58d17fa-3bdd-42e1-b7db-a8d3b6cc9b95.gif)
+
+### 2. Create new PR
+
+```
+cmd pr:create
+```
+
+Or
+
+```
+cmd prc
+```
