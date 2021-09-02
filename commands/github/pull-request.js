@@ -114,6 +114,7 @@ const getClickupTask = async (branchName) => {
 };
 
 const createFeatureFlow = async (branch) => {
+  const conf = config.get("pull_request.feature");
   const task = await getClickupTask(branch.name);
   const feature = await question.input("Input feature name");
   if (!feature) {
@@ -125,9 +126,18 @@ const createFeatureFlow = async (branch) => {
   const title = `${prefix}${feature}`;
   logger.notice("We will create PR name", title);
 
+  shell.exec(`echo '${conf.template}' > PR.md`, {
+    silent: true,
+  });
+  shell.exec("code . -r PR.md", { silent: true });
+  await question.input(
+    "You can make adjustments to PR.md. Then press enter to continue."
+  );
+  const { stdout: body } = shell.exec("cat PR.md", { silent: true });
+  shell.exec("rm .temp_pr.md", { silent: true });
+
   const branches = getAllBranches();
-  const defaultBaseBranches =
-    config.get("pull_request.feature.base_branches") || [];
+  const defaultBaseBranches = conf.base_branches || [];
   const baseBranches = branches.filter(
     (b) => defaultBaseBranches.includes(b) && b !== branch.name
   );
@@ -139,14 +149,14 @@ const createFeatureFlow = async (branch) => {
     }))
   );
 
-  const assignees = config.get("pull_request.feature.assignees") || [];
-  const reviewers = config.get("pull_request.feature.reviewers") || [];
+  const assignees = conf.assignees || [];
+  const reviewers = conf.reviewers || [];
 
   const bar = progress.bar(chalk.cyan("❯ Create PR: "), 0.2, 2);
   const prs = selected.map((branch, index) => {
-    const labels = config.get("pull_request.feature.labels") || [branch];
+    const labels = conf.labels || [branch];
     const pr = createPR(branch, title, {
-      body: "",
+      body: body,
       assignee: assignees.join(","),
       reviewer: reviewers.join(","),
       label: labels.join(","),
