@@ -1,8 +1,7 @@
-const branchCommand = require("./branch");
+import * as branchCommand from "./branch.js";
+import * as pullRequestCommand from "./pull-request.js";
 
-const commands = [branchCommand];
-const register = (program) => {
+const commands = [branchCommand, pullRequestCommand];
+export const register = (program) => {
   commands.forEach((cmd) => cmd.register(program));
 };
-
-module.exports.register = register;

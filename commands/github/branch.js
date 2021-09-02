@@ -1,7 +1,8 @@
-const inquirer = require("inquirer");
-const shell = require("shelljs");
+import inquirer from "inquirer";
+import shell from "shelljs";
 
-const logger = require("../../utils/logger");
+import * as constants from "../../constants/index.js";
+import * as logger from "../../utils/logger.js";
 
 const gotoNewBranch = (origin, newBranch) => {
   const command = [
@@ -25,7 +26,11 @@ const receiver = (_options) => {
         type: "list",
         name: "action",
         message: "What purpose of new branch?",
-        choices: ["Feature", "Hotfix", "Release"],
+        choices: [
+          constants.BRANCH_PURPOSE.FEATURE,
+          constants.BRANCH_PURPOSE.HOTFIX,
+          constants.BRANCH_PURPOSE.RELEASE,
+        ],
       },
       {
         type: "input",
@@ -37,15 +42,15 @@ const receiver = (_options) => {
       let origin = "";
       let prefix = "";
       switch (answers.action) {
-        case "Feature":
+        case constants.BRANCH_PURPOSE.FEATURE:
           prefix = "feat";
           origin = "develop";
           break;
-        case "Hotfix":
+        case constants.BRANCH_PURPOSE.HOTFIX:
           prefix = "hotfix";
           origin = "master";
           break;
-        case "Release":
+        case constants.BRANCH_PURPOSE.RELEASE:
           prefix = "release";
           origin = "develop";
           break;
@@ -58,12 +63,11 @@ const receiver = (_options) => {
     });
 };
 
-const register = (program) => {
+export const register = (program) => {
   program
     .command("branch:create")
     .alias("brc")
+    .alias("br:c")
     .description("Create a new branch")
     .action(receiver);
 };
-
-module.exports.register = register;
