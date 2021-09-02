@@ -10,12 +10,12 @@ const gotoNewBranch = (origin, newBranch) => {
     `git reset origin/${origin} --hard`,
     `git checkout -b "${newBranch}"`,
   ].join(" && ");
-  if (shell.exec(command, { silent: true }).code !== 0) {
+  const result = shell.exec(command, { silent: true });
+  if (result.code !== 0) {
     logger.error("Git commit failed");
     return shell.exit(1);
   }
-
-  logger.success("Now we are on new branch:", newBranch);
+  logger.success("Done! We are on new branch");
 };
 
 const receiver = (_options) => {
@@ -30,7 +30,7 @@ const receiver = (_options) => {
       {
         type: "input",
         name: "branch",
-        message: "Input the branch name:",
+        message: "Input branch name:",
       },
     ])
     .then((answers) => {
@@ -61,6 +61,7 @@ const receiver = (_options) => {
 const register = (program) => {
   program
     .command("branch:create")
+    .alias("brc")
     .description("Create a new branch")
     .action(receiver);
 };
