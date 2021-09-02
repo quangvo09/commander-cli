@@ -1,7 +1,7 @@
 {
   "name": "@smartapp-org/commander-cli",
   "description": "To help execute a sequence commands, which you need to do multiple times. It's boring right?",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
