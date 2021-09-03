@@ -98,27 +98,28 @@ const getClickupTask = async (branchName) => {
   let taskId = null;
   const pattern = /cu-([\w\d]+)/i;
   const matches = branchName.match(pattern);
-  if (matches && matches.length > 2) {
+  if (matches && matches.length >= 2) {
     taskId = matches[1];
   }
 
-  taskId = await question.input("Input clickup task id", {
+  taskId = await question.input("Input Clickup task id", {
     default: taskId,
   });
 
   if (!taskId) {
     logger.warn("Skip to link to clickup task");
+  } else {
+    logger.notice("Will link to clickup task", `cu-${taskId}`);
   }
 
   return taskId;
 };
 
-const createFeatureFlow = async (branch) => {
-  const conf = config.get("pull_request.feature");
+const processCreatePR = async (branch, conf) => {
   const task = await getClickupTask(branch.name);
-  const feature = await question.input("Input feature name");
+  const feature = await question.input("Input PR name");
   if (!feature) {
-    logger.error("Please input feature name");
+    logger.error("Please input PR name");
     return shell.exit(1);
   }
 
@@ -134,7 +135,7 @@ const createFeatureFlow = async (branch) => {
     "You can make adjustments to PR.md. Then press enter to continue."
   );
   const { stdout: body } = shell.exec("cat PR.md", { silent: true });
-  shell.exec("rm .temp_pr.md", { silent: true });
+  shell.exec("rm PR.md", { silent: true });
 
   const branches = getAllBranches();
   const defaultBaseBranches = conf.base_branches || [];
@@ -177,23 +178,23 @@ const createFeatureFlow = async (branch) => {
   });
 };
 
-const createReleaseFlow = (branch) => {};
-const createHotfixFlow = (branch) => {};
-
 const receiver = (_options) => {
   const branch = getCurrentBranch();
+  let conf = {};
   logger.notice("Create PR for purpose:", branch.purpose);
   switch (branch.purpose) {
     case constants.BRANCH_PURPOSE.FEATURE:
-      createFeatureFlow(branch);
+      conf = config.get("pull_request.feature");
       break;
     case constants.BRANCH_PURPOSE.RELEASE:
-      createReleaseFlow(branch);
+      conf = config.get("pull_request.release");
       break;
     case constants.BRANCH_PURPOSE.HOTFIX:
-      createHotfixFlow(branch);
+      conf = config.get("pull_request.hotfix");
       break;
   }
+
+  processCreatePR(branch, conf);
 };
 
 export const register = (program) => {

@@ -1,6 +1,6 @@
 import inquirer from "inquirer";
 
-export const confirm = async (message, ...props) => {
+export const confirm = async (message, props) => {
   const question = {
     type: "confirm",
     name: "value",
@@ -11,7 +11,7 @@ export const confirm = async (message, ...props) => {
   return answer.value;
 };
 
-export const input = async (message, ...props) => {
+export const input = async (message, props) => {
   const question = {
     type: "input",
     name: "value",
@@ -22,7 +22,7 @@ export const input = async (message, ...props) => {
   return answer.value;
 };
 
-export const checkbox = async (message, choices, ...props) => {
+export const checkbox = async (message, choices, props) => {
   const question = {
     type: "checkbox",
     name: "value",
