@@ -10,6 +10,7 @@ require.extensions[".md"] = function (module, filename) {
 
 const pkg = require("../package.json");
 const featureTemplate = require("../materials/pr_feature_template.md");
+const hotfixTemplate = require("../materials/pr_hotfix_template.md");
 const filePath = path.join(path.dirname(""), ".cmdrc");
 
 const config = new Store(
@@ -33,6 +34,7 @@ const config = new Store(
         assignees: ["me"],
         reviewers: ["me"],
         labels: ["hotfix"],
+        template: hotfixTemplate,
       },
     },
   },
